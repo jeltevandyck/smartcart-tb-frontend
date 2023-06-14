@@ -1,0 +1,66 @@
+<div class="grid grid-cols-2 gap-0">
+    <div class="h-screen bg-fes-blue flex flex-col justify-center items-center">
+        <img src="./assets/images/logo_transparant.png" alt="FESMARKET Logo" class="h-52">
+    </div>
+    <div class="h-screen bg-white flex flex-col justify-center items-center">
+        <div class="fixed bottom-1 right-1">
+            <div class="flex flex-col">
+                <!-- <button (click)="activeModal = 'user'" class="text-gray-800 text-2xl hover:text-gray-600 hover:cursor-pointer">
+                    <i class="fa-solid fa-user"></i>
+                </button> -->
+                <button (click)="activeModal = 'cart'" class="text-gray-800 text-2xl hover:text-gray-600 hover:cursor-pointer">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+            </div>
+        </div>
+        <div class="mt-8">
+            <h1 class="text-3xl font-bold text-fes-blue uppercase">Welcome to fesmarket</h1>
+        </div>
+        <div class="flex flex-col items-center justify-center flex-grow">
+            <button (click)="activeModal = 'user'" class="flex flex-col items-center justify-center" *ngIf="currentCart != null && !cs.isGroceryList()">
+                <ngx-qrcode [value]="qrCode" [width]="250"></ngx-qrcode>
+                <p class="text-xs uppercase font-bold text-gray-500">Scan the QR code to import your grocery list.</p>
+            </button>
+            <div class="p-4 text-sm text-gray-800 rounded-lg bg-gray-100 mb-3 flex w-96" *ngIf="currentCart != null && cs.isGroceryList()">
+                <div
+                    class="relative inline-flex items-center justify-center w-7 h-7 overflow-hidden bg-fes-blue rounded-full">
+                    <span class="font-medium text-white text-sm"></span>
+                </div>
+                <div class="flex flex-col justify-center items-center ml-3">
+                    <p class="text-fes-blue font-semibold">{{cs.getGroceryList().store.name}}</p>
+                </div>
+                <div class="ml-auto">
+                    <a *ngIf="isCollectedAll(cs.getGroceryList())" (click)="reset(cs.getGroceryList())" class="mr-1">
+                        <div
+                            class="relative inline-flex items-center justify-center w-7 h-7 overflow-hidden bg-red-800 hover:bg-red-700 rounded-full">
+                            <span class="font-medium text-white text-sm">
+                                <i class="fa-solid fa-arrow-rotate-right"></i>
+                            </span>
+                        </div>
+                    </a>
+                    <a (click)="activeModal = 'grocery-list'">
+                        <div
+                            class="relative inline-flex items-center justify-center w-7 h-7 overflow-hidden bg-green-800 hover:bg-green-700 rounded-full">
+                            <span class="font-medium text-white text-sm">
+                                <i class="fa-solid fa-pen"></i>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <p *ngIf="currentCart == null" class="text-lg uppercase font-bold text-red-500">This cart is not available!</p>
+            </div>
+        </div>
+        <div class="mt-auto">
+            <button (click)="authenticate()" class="flex items-center justify-between bg-fes-blue text-white font-bold uppercase rounded-lg text-sm w-96 px-5 py-3 mb-8 shadow-xl animate-bounce hover:animate-none">
+                <span class="flex-grow text-center">Start shopping</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<fes-select-user-modal *ngIf="activeModal == 'user'" (close)="activeModal = ''" (select)="activeModal = 'grocery-list'"></fes-select-user-modal>
+<fes-select-cart-modal *ngIf="activeModal == 'cart'" (close)="activeModal = ''" (selected)="load()" (removed)="load()"></fes-select-cart-modal>
+<fes-select-grocery-list-modal *ngIf="activeModal == 'grocery-list'" (close)="activeModal=''" (back)="activeModal = 'user'"></fes-select-grocery-list-modal>

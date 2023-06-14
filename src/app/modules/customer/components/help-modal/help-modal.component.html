@@ -1,0 +1,38 @@
+<fes-modal>
+    <div class="w-96 h-96">
+        <div class="flex justify-end">
+            <p class="text-xl font-bold text-fes-blue mr-auto uppercase">Help</p>
+            <button (click)="closeModal()" class="p-2 rounded-full bg-gray-300 hover:bg-gray-400 text-gray-800 hover:text-gray-900">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                <path d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>          
+        </div>
+        <div class="max-h-80 flex flex-col overflow-y-auto mt-5 p-2">
+            <div class="p-4 text-sm text-gray-800 rounded-lg bg-gray-100 mb-3 flex" role="alert">
+                <p class="text-lg">I want to <span class="font-bold text-red-700">cancel</span> my order!</p>
+                <div class="ml-auto">
+                    <a (click)="cancel()">
+                        <div class="relative inline-flex items-center justify-center w-7 h-7 overflow-hidden bg-fes-blue hover:bg-blue-950  rounded-full">
+                            <span class="font-medium text-white text-sm">
+                                <i class="fa-solid fa-angle-right"></i>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="p-4 text-sm text-gray-800 rounded-lg bg-gray-100 mb-3 flex hover:shadow" role="alert">
+                <p class="text-lg">My product is not scanning?</p>
+                <div class="ml-auto">
+                    <a (click)="openModal('enter-barcode')">
+                        <div class="relative inline-flex items-center justify-center w-7 h-7 overflow-hidden bg-fes-blue hover:bg-blue-950 rounded-full">
+                            <span class="font-medium text-white text-sm">
+                                <i class="fa-solid fa-angle-right"></i>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>          
+    </div>
+</fes-modal>

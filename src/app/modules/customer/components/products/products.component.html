@@ -1,0 +1,53 @@
+<div class="flex flex-col justify-center items-center mt-3">
+    <p class="text-2xl uppercase font-bold text-fes-blue">Products</p>
+</div>
+<div *ngIf="order != null">
+    <div class="flex flex-col overflow-hidden m t-3 max-h-[35rem]" *ngIf="order.orderItems.length != 0">
+        <div class="overflow-y-auto">
+            <div class="bg-white mx-4 mb-2 rounded-lg shadow" *ngFor="let item of order.orderItems">
+                <div class="flex justify-center p-2 items-center">
+                    <!-- <img class="w-12 h-12 rounded-lg"
+                        src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Product"> -->
+                        <div class="relative">
+                            <div class="w-10 h-10 rounded flex justify-center items-center bg-gray-200 text-lg">
+                                <i class="fa-solid fa-image"></i>
+                            </div>
+                            <span *ngIf="getTotal(item).discount > 0" class="absolute top-0 left-8 transform -translate-y-1/2 w-3.5 h-3.5 bg-red-600 border-2 border-white rounded-full"></span>
+                        </div>
+                    <div class="flex flex-col ml-2">
+                        <p class="flex items-center font-bold text-fes-blue uppercase text-lg">{{item.product.name}}
+                            <span class="bg-blue-100 text-blue-800 text-xs font-bold text-center ml-2 px-2 rounded">
+                                {{item.amount}}
+                            </span>
+                        </p>
+                        <p class="text-sm font-bold text-gray-800">{{getTotal(item).price | currency: 'EUR'}}
+                        <span *ngIf="getTotal(item).discount > 0" class="text-xs font-bold text-gray-500 ml-1">(-{{getTotal(item).discount | currency: 'EUR'}})</span>
+                        </p>
+                    </div>
+                    <div class="ml-auto">
+                        <button (click)="modal.emit(item)"
+                            class="relative inline-flex items-center justify-center w-7 h-7 overflow-hidden bg-fes-blue hover:bg-blue-950 rounded-full mr-1">
+                            <span class="font-medium text-white text-sm">
+                                <i class="fa-solid fa-pen"></i>
+                            </span>
+                        </button>
+                        <button (click)="removeItem(item)"
+                            class="relative inline-flex items-center justify-center w-7 h-7 overflow-hidden bg-red-700 hover:bg-red-800 rounded-full">
+                            <span class="font-medium text-white text-sm">
+                                <i class="fa-sharp fa-solid fa-trash"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white mx-4 mb-2 rounded-lg shadow mt-3" *ngIf="order.orderItems.length == 0">
+        <div class="flex justify-center p-2 items-center">
+            <span class="text-red-800 mr-auto">
+                <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+            </span>
+            <p class="font-bold text-red-800 uppercase mr-auto">No products!</p>
+        </div>
+    </div>
+</div>

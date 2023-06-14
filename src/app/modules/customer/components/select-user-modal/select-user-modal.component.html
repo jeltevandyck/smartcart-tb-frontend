@@ -1,0 +1,38 @@
+<fes-modal>
+    <div class="w-96 h-96">
+        <div class="flex justify-end">
+            <p class="text-xl font-bold text-fes-blue mr-auto uppercase">Select a customer</p>
+            <button (click)="close.emit()" class="p-2 rounded-full bg-gray-300 hover:bg-gray-400 text-gray-800 hover:text-gray-900">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                <path d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>          
+        </div>
+        <div class="max-h-80 flex flex-col overflow-y-auto mt-5 p-2" *ngIf="users.length > 0">
+            <div class="p-4 text-sm text-gray-800 rounded-lg bg-gray-100 mb-3 flex" role="alert" *ngFor="let user of users">
+                <div class="relative inline-flex items-center justify-center w-7 h-7 overflow-hidden bg-fes-blue rounded-full">
+                    <span class="font-medium text-white text-sm">{{user.firstName.charAt(0)}}</span>
+                </div>
+                <div class="flex flex-col justify-center items-center ml-3">
+                    <p class="text-fes-blue font-semibold">{{user.firstName}} {{user.lastName}}</p>
+                </div>
+                <div class="ml-auto">
+                    <a (click)="selectUser(user)" *ngIf="currentUser == null || currentUser.id != user.id">
+                        <div class="relative inline-flex items-center justify-center w-7 h-7 overflow-hidden bg-green-800 hover:bg-green-700 rounded-full">
+                            <span class="font-medium text-white text-sm">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </div>
+                    </a>
+                    <a (click)="remove()" *ngIf="currentUser != null && currentUser.id == user.id">
+                        <div class="relative inline-flex items-center justify-center w-7 h-7 overflow-hidden bg-red-800 hover:bg-red-700 rounded-full">
+                            <span class="font-medium text-white text-sm">
+                                <i class="fa-sharp fa-solid fa-trash"></i>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>          
+    </div>
+</fes-modal>

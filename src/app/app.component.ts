@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AlertService } from './modules/shared/services/alert.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'shoppingcart-tb-app';
+
+  constructor(public ars: AlertService) {
+
+  }
 }

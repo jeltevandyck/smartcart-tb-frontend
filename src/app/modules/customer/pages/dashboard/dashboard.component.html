@@ -1,0 +1,59 @@
+<div class="grid grid-cols-8 h-screen">
+    <div class="col-span-2 bg-gray-100 shadow-xl">
+        <fes-grocery-list></fes-grocery-list>
+    </div>
+    <div class="col-span-4 bg-fes-blue">
+        <div class="flex flex-col justify-center items-center mt-3">
+            <p class="text-2xl uppercase font-bold text-fes-blue">Map</p>
+            <img src="assets/images/3d_map.png" alt="map" class="w-5/6">
+        </div>
+    </div>
+    <div class="col-span-2 bg-gray-100 shadow-xl">
+        <fes-products [order]="order" (modal)="openEditModal($event)" (remove)="removeProduct($event)"></fes-products>
+    </div>
+</div>
+<div class="fixed bottom-0 left-0 w-full bg-white text-white py-4 px-6 flex justify-between">
+    <div class="flex items-center justify-center">
+        <div class="bg-gray-200 px-5 py-1 rounded-lg flex items-center">
+            <span class="text-lg font-bold text-green-600">{{getTotal().price | currency: 'EUR'}}</span>
+            <span class="text-xs font-bold text-red-600 ml-2" *ngIf="getTotal().discount > 0">(-{{getTotal().discount | currency: 'EUR'}})</span>
+        </div>
+    </div>
+    <div class="flex items-center justify-center mr-auto ml-3">
+        <div class="bg-gray-200 px-5 py-1 rounded-lg">
+            <span class="text-lg font-bold text-gray-800">{{getTotal().weight | number: '1.3-3'}} kg</span>
+        </div>
+    </div>
+    <div class="flex items-center">
+        <button (click)="activeModal = 'help'"
+            class="flex items-center justify-between bg-gray-200 hover:bg-gray-300 text-fes-blue font-bold uppercase rounded-lg text-sm w-24 px-5 py-3 shadow mr-3">
+            <span class="flex-grow text-center">help</span>
+            <svg class="ml-1" version="1.0" color="" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="none">
+                    <path d="M500 5104 c-234 -50 -436 -254 -485 -489 -22 -105 -22 -4005 0 -4110
+50 -237 252 -439 491 -490 104 -22 4004 -22 4109 0 181 38 349 168 433 335 77
+153 72 -4 72 2210 0 2214 5 2057 -72 2210 -84 167 -252 297 -433 335 -102 21
+-4015 21 -4115 -1z m2244 -1119 c118 -18 238 -58 331 -109 88 -50 200 -157
+248 -237 125 -211 123 -502 -4 -715 -50 -83 -163 -194 -341 -332 -229 -178
+-266 -231 -278 -402 -7 -98 -18 -133 -46 -144 -8 -3 -86 -6 -173 -6 -117 0
+-162 3 -176 14 -38 28 -38 247 0 356 50 140 148 257 348 412 165 128 227 191
+265 267 72 144 42 335 -68 435 -85 77 -199 111 -344 104 -211 -11 -347 -123
+-392 -326 -24 -109 -30 -112 -224 -112 -199 0 -206 4 -203 107 4 139 64 299
+156 414 174 218 538 329 901 274z m-92 -2289 c104 -44 168 -133 176 -246 6
+-90 -17 -159 -75 -221 -67 -71 -126 -94 -248 -94 -89 0 -106 3 -157 28 -268
+131 -197 523 101 556 66 7 157 -3 203 -23z" />
+                </g>
+            </svg>
+        </button>
+        <button (click)="navigate()"
+            class="flex items-center justify-between bg-fes-blue hover:bg-blue-900 text-white font-bold uppercase rounded-lg text-sm w-72 px-5 py-3 shadow-xl">
+            <span class="flex-grow text-center">Checkout</span>
+            <i class="fa-solid fa-cart-shopping"></i>
+        </button>
+    </div>
+</div>
+
+<fes-help-modal (close)="activeModal = ''" *ngIf="activeModal == 'help'" (open)="activeModal = $event"></fes-help-modal>
+<fes-enter-barcode-modal (close)="activeModal = ''" *ngIf="activeModal == 'enter-barcode'"></fes-enter-barcode-modal>
+<fes-edit-product-modal (close)="closeEditModal()" *ngIf="activeModal == 'edit-product'" [product]="editProduct" (edit)="updateProduct($event)"></fes-edit-product-modal>
