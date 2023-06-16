@@ -1,35 +1,59 @@
-<div class="grid grid-cols-2 gap-0">    
+<div class="grid grid-cols-2 gap-0">
     <div class="h-screen bg-fes-blue flex flex-col justify-center items-center">
         <div class="fixed top-2 left-3">
-            <a routerLink="/c/dashboard" class="text-white font-bold uppercase cursor-pointer"><i class="fa-solid fa-chevron-left mr-2 text-sm"></i>Back</a>
-        </div> 
+            <a routerLink="/c/dashboard" class="text-white font-bold uppercase cursor-pointer"><i
+                    class="fa-solid fa-chevron-left mr-2 text-sm"></i>Back</a>
+        </div>
         <img src="./assets/images/logo_transparant.png" alt="FESMARKET Logo" class="h-52">
     </div>
     <div class="h-screen bg-white flex flex-col justify-center items-center">
         <div class="mt-8">
             <h1 class="text-3xl font-bold text-fes-blue uppercase">Checkout</h1>
         </div>
+    
         <div class="flex flex-col items-center justify-center flex-grow">
             <div class="flex justify-center">
-                <button (click)="checkoutMethod ='card'" [ngClass]="{'border-4 border-fes-blue': checkoutMethod == 'card'}" class="flex flex-col items-center justify-center bg-gray-100 w-64 h-32 p-3 rounded-lg shadow transition hover:border-4 hover:border-fes-blue">
+                <button (click)="checkoutMethod ='card'"
+                    [ngClass]="{'border-4 border-fes-blue': checkoutMethod == 'card'}"
+                    class="flex flex-col items-center justify-center bg-gray-100 w-64 h-32 p-3 rounded-lg shadow transition hover:border-4 hover:border-fes-blue">
                     <span class="text-5xl text-fes-blue"><i class="fa-regular fa-credit-card"></i></span>
                     <p class="text-lg text-fes-blue uppercase font-semibold mt-2">Credit card</p>
                 </button>
-                <div class="flex items-center justify-center px-5">
+                <div class="flex items-center justify-center px-5 mx-5">
                     <p class="text-lg text-fes-blue uppercase font-semibold">OR</p>
                 </div>
-                <button (click)="checkoutMethod ='cash'" [ngClass]="{'border-4 border-fes-blue': checkoutMethod == 'cash'}" class="flex flex-col items-center justify-center bg-gray-100 w-64 h-32 p-3 rounded-lg shadow transition hover:border-4 hover:border-fes-blue">
+                <button (click)="checkoutMethod ='cash'"
+                    [ngClass]="{'border-4 border-fes-blue': checkoutMethod == 'cash'}"
+                    class="flex flex-col items-center justify-center bg-gray-100 w-64 h-32 p-3 rounded-lg shadow transition hover:border-4 hover:border-fes-blue">
                     <span class="text-5xl text-fes-blue"><i class="fa-solid fa-sack-dollar"></i></span>
                     <p class="text-lg text-fes-blue uppercase font-semibold mt-2">Cash</p>
                 </button>
             </div>
         </div>
+        <div class="flex flex-col items-center justify-center mb-12 w-4/5 bg-gray-100 rounded-lg px-10 py-3">
+            <div class="flex justify-items-start w-full">
+                <p class="text-sm text-fes-blue font-semibold mr-auto uppercase">Subtotal</p>
+                <p class="text-sm text-fes-blue font-semibold">{{getTotal().discount + getTotal().price | currency: 'EUR'}}</p>
+            </div>
+            <div class="flex justify-items-start w-full">
+                <p class="text-sm text-fes-blue font-semibold mr-auto uppercase">Discount</p>
+                <p class="text-sm text-red-500 font-semibold">-{{getTotal().discount | currency: 'EUR'}}</p>
+            </div>
+            <div class="border-b border-2 border-gray-300 w-full my-3"></div>
+            <div class="flex justify-items-start w-full">
+                <p class="text-fes-blue font-bold mr-auto uppercase">Total to pay</p>
+                <p class="text-fes-blue font-bold">{{getTotal().price | currency: 'EUR'}}</p>
+            </div>
+        </div>
         <div class="mt-auto">
-            <p *ngIf="checkoutMethod != ''" class="text-gray-800 font-semibold text-xs mb-1 text-center">You're paying with <span class="font-bold">{{checkoutMethod}}</span></p>
-            <button (click)="checkout()" class="flex items-center justify-between bg-fes-blue text-white font-bold uppercase rounded-lg text-sm w-96 px-5 py-3 mb-8 shadow-xl">
+            <p *ngIf="checkoutMethod != ''" class="text-gray-800 font-semibold text-xs mb-1 text-center">You're paying
+                with <span class="font-bold">{{checkoutMethod}}</span></p>
+            <button (click)="checkout()"
+                class="flex items-center justify-between bg-fes-blue text-white font-bold uppercase rounded-lg text-sm w-96 px-5 py-3 mb-8 shadow-xl">
                 <i *ngIf="checkoutMethod == 'card'" class="fa-regular fa-credit-card"></i>
                 <i *ngIf="checkoutMethod == 'cash'" class="fa-solid fa-sack-dollar"></i>
-                <span class="flex-grow text-center">PAY</span>
+                <span class="flex-grow text-center">PAY <span class="font-normal">{{getTotal().price | currency:
+                        'EUR'}}</span></span>
                 <i class="fa-solid fa-arrow-right"></i>
             </button>
         </div>

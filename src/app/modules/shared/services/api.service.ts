@@ -34,8 +34,6 @@ export class ApiService {
       code: cart.code,
     }
 
-    console.log(registerCart)
-
     return this.http.post(`${environment.baseUrl}/Cart/Register`, registerCart)
   }
 

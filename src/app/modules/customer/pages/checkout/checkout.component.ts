@@ -52,4 +52,23 @@ export class CheckoutComponent implements OnInit {
 
 
   }
+
+  getTotal() {
+    const total = {
+      price: 0,
+      discount: 0,
+      weight: 0
+    }
+    if (this.order) {
+      this.order.orderItems.forEach((orderItem: any) => {
+        total.weight += orderItem.product.weight * orderItem.amount;
+        total.price += orderItem.product.price * orderItem.amount;
+        total.discount += orderItem.product.discount * orderItem.amount;
+        total.discount += (orderItem.product.price * (orderItem.product.discountPercentage / 100)) * orderItem.amount;
+      });
+
+      total.price -= total.discount;
+    }
+    return total;
+  }
 }

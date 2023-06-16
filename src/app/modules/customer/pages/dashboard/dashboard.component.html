@@ -46,7 +46,7 @@
                 </g>
             </svg>
         </button>
-        <button (click)="navigate()"
+        <button (click)="checkout()"
             class="flex items-center justify-between bg-fes-blue hover:bg-blue-900 text-white font-bold uppercase rounded-lg text-sm w-72 px-5 py-3 shadow-xl">
             <span class="flex-grow text-center">Checkout</span>
             <i class="fa-solid fa-cart-shopping"></i>
@@ -57,3 +57,8 @@
 <fes-help-modal (close)="activeModal = ''" *ngIf="activeModal == 'help'" (open)="activeModal = $event"></fes-help-modal>
 <fes-enter-barcode-modal (close)="activeModal = ''" *ngIf="activeModal == 'enter-barcode'"></fes-enter-barcode-modal>
 <fes-edit-product-modal (close)="closeEditModal()" *ngIf="activeModal == 'edit-product'" [product]="editProduct" (edit)="updateProduct($event)"></fes-edit-product-modal>
+<fes-confirm-modal (close)="activeModal = ''" 
+        *ngIf="activeModal == 'confirm-grocery-list'" 
+        (confirm)="confirmCheckout()" 
+        (cancel)="activeModal = ''"
+        [message]="'You didn\'t scan every product on your grocery list. You sure you want to continue?'"></fes-confirm-modal>

@@ -15,6 +15,7 @@ import { HelpModalComponent } from './components/help-modal/help-modal.component
 import { EnterBarcodeModalComponent } from './components/enter-barcode-modal/enter-barcode-modal.component';
 import { EditProductModalComponent } from './components/edit-product-modal/edit-product-modal.component';
 import { SelectGroceryListModalComponent } from './components/select-grocery-list-modal/select-grocery-list-modal.component';
+import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { SelectGroceryListModalComponent } from './components/select-grocery-lis
     EnterBarcodeModalComponent,
     EditProductModalComponent,
     SelectGroceryListModalComponent,
+    ConfirmModalComponent,
   ],
   imports: [
     CommonModule,

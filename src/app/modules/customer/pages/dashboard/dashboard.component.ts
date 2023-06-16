@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { catchError, of } from 'rxjs';
 import { AlertMessage } from 'src/app/modules/shared/models/AlertMessage';
 import { AlertService } from 'src/app/modules/shared/services/alert.service';
 import { ApiService } from 'src/app/modules/shared/services/api.service';
 import { CartService } from 'src/app/modules/shared/services/cart.service';
+import { WebsocketService } from 'src/app/modules/shared/services/websocket.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,12 +19,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   order: any;
 
   scannedProductObserver: any;
+  confirmEveryItemScanned: boolean = false;
 
   constructor(
     private rt: Router,
     private as: AlertService,
     private api: ApiService,
-    private cs: CartService) { }
+    private cs: CartService,
+    private ws: WebsocketService) { }
 
   ngOnInit(): void {
     this.order = this.cs.getOrder();
@@ -30,6 +34,34 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (!this.order) {
       this.rt.navigate(['/c/start']);
     }
+
+    // this.ws.connect().subscribe((msg: any) => {
+    //   console.log(`Connection established: ${msg.origin}`);
+    // });
+
+    // this.ws.getMessage().subscribe((msg) => {
+    //   const data = JSON.parse(msg.data);
+
+    //   console.log(data.data)
+    //   if (data.type === 'scan') {
+    //     const cart = this.cs.getCart();
+    //     this.api.getProductByBarcode(data.data, cart.storeId)
+    //       .pipe(catchError((error: any) => {
+
+    //         const errorMsg = error.error.Errors[0].Message;
+    //         this.as.addAlert(new AlertMessage("error", errorMsg));
+
+    //         return of(null);
+    //       }))
+    //       .subscribe((product: any) => {
+    //         if (product) {
+    //           this.cs.scanProduct(product);
+    //           this.as.addAlert(new AlertMessage('success', `Product ${product.name} added to cart!`));
+    //         }
+    //       })
+    //   }
+    // });
+
 
     this.scannedProductObserver = this.cs.scannedProduct.subscribe((product: any) => {
       this.api.createOrderItem(this.order, product, 1).subscribe((order: any) => {
@@ -42,6 +74,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.scannedProductObserver.unsubscribe();
+    this.ws.disconnect();
   }
 
   getTotal() {
@@ -55,7 +88,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         total.weight += orderItem.product.weight * orderItem.amount;
         total.price += orderItem.product.price * orderItem.amount;
         total.discount += orderItem.product.discount * orderItem.amount;
-        total.discount += (orderItem.product.price * (orderItem.product.discountPercentage/100)) * orderItem.amount;
+        total.discount += (orderItem.product.price * (orderItem.product.discountPercentage / 100)) * orderItem.amount;
       });
 
       total.price -= total.discount;
@@ -63,8 +96,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return total;
   }
 
-  navigate() {
+  checkout() {
+    const groceryList = this.cs.getGroceryList();
+
+    const allItemsScanned = groceryList != null ? groceryList.groceryItems.every((groceryItem: any) => groceryItem.isCollected) : true;
+
     if (this.cs.getOrder().orderItems.length > 0) {
+
+      if (!allItemsScanned && !this.confirmEveryItemScanned) {
+        this.activeModal = 'confirm-grocery-list'
+        return;
+      }
+
       this.rt.navigate(['/c/checkout']);
     } else {
       this.as.addAlert(new AlertMessage('error', 'You didn\'t add any products to cart.'))
@@ -75,8 +118,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.api.updateOrderItem(product).subscribe((res: any) => {
       this.cs.setOrder(res);
       this.order = res;
-
-      console.log(this.order)
 
       this.cs.updateOrderItemEvent();
 
@@ -101,5 +142,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   closeEditModal() {
     this.activeModal = '';
     this.editProduct = null;
+  }
+
+  confirmCheckout() {
+    this.confirmEveryItemScanned = true;
+    this.activeModal = '';
+    this.checkout();
   }
 }
