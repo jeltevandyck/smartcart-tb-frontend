@@ -31,6 +31,9 @@ export class GroceryListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.updatedOrderItemObserver.unsubscribe();
+    if (this.updatedOrderItemObserver != null)
+    {
+      this.updatedOrderItemObserver.unsubscribe();
+    }
   }
 }
