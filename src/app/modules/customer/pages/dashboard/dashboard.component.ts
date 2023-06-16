@@ -35,32 +35,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.rt.navigate(['/c/start']);
     }
 
-    // this.ws.connect().subscribe((msg: any) => {
-    //   console.log(`Connection established: ${msg.origin}`);
-    // });
+    this.ws.connect();
 
-    // this.ws.getMessage().subscribe((msg) => {
-    //   const data = JSON.parse(msg.data);
+    this.ws.getMessage().subscribe((msg) => {
+      const data = JSON.parse(msg.data);
 
-    //   console.log(data.data)
-    //   if (data.type === 'scan') {
-    //     const cart = this.cs.getCart();
-    //     this.api.getProductByBarcode(data.data, cart.storeId)
-    //       .pipe(catchError((error: any) => {
+      if (data.cartId !== this.cs.getCart().id) return; 
 
-    //         const errorMsg = error.error.Errors[0].Message;
-    //         this.as.addAlert(new AlertMessage("error", errorMsg));
+      if (data.type === 'scan') {
+        const cart = this.cs.getCart();
+        this.api.getProductByBarcode(data.data.barcode, cart.storeId)
+          .pipe(catchError((error: any) => {
 
-    //         return of(null);
-    //       }))
-    //       .subscribe((product: any) => {
-    //         if (product) {
-    //           this.cs.scanProduct(product);
-    //           this.as.addAlert(new AlertMessage('success', `Product ${product.name} added to cart!`));
-    //         }
-    //       })
-    //   }
-    // });
+            const errorMsg = error.error.Errors[0].Message;
+            this.as.addAlert(new AlertMessage("error", errorMsg));
+
+            return of(null);
+          }))
+          .subscribe((product: any) => {
+            if (product) {
+              this.cs.scanProduct(product);
+              this.as.addAlert(new AlertMessage('success', `Product ${product.name} added to cart!`));
+            }
+          })
+      }
+    });
 
 
     this.scannedProductObserver = this.cs.scannedProduct.subscribe((product: any) => {

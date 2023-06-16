@@ -11,7 +11,7 @@ export class WebsocketService {
   constructor() { 
     
     const socketConfig: WebSocketSubjectConfig<any> = {
-      url: 'ws://localhost:8080',
+      url: 'ws://35.205.116.2:8080',
       deserializer: (data) => data,
       serializer: (data) => data,
     };
