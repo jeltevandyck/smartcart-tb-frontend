@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { webSocket, WebSocketSubject, WebSocketSubjectConfig }  from 'rxjs/webSocket';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class WebsocketService {
   constructor() { 
     
     const socketConfig: WebSocketSubjectConfig<any> = {
-      url: 'ws://35.205.116.2:8080',
+      url: `ws://${environment.ip}:8080`,
       deserializer: (data) => data,
       serializer: (data) => data,
     };
