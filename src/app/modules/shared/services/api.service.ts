@@ -25,6 +25,15 @@ export class ApiService {
     return this.http.get(`${environment.baseUrl}/Product/Barcode?barcode=${barcode}&storeId=${storeId}`)
   }
 
+  updateCart(cart: any) {
+    const cartUpdate = {
+      id: cart.id,
+      isClaimed: cart.isClaimed,
+    }
+
+    return this.http.put(`${environment.baseUrl}/Cart`, cartUpdate)
+  }
+
   registerCart(cart: any, user: any, groceryList: any) {
     const registerCart = {
       id: cart.id,

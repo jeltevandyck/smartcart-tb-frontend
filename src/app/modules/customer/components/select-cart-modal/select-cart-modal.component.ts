@@ -3,6 +3,7 @@ import { AlertMessage } from 'src/app/modules/shared/models/AlertMessage';
 import { AlertService } from 'src/app/modules/shared/services/alert.service';
 import { ApiService } from 'src/app/modules/shared/services/api.service';
 import { CartService } from 'src/app/modules/shared/services/cart.service';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'fes-select-cart-modal',
@@ -19,7 +20,7 @@ export class SelectCartModalComponent implements OnInit {
   currentCart: any;
 
   constructor(
-    private api: ApiService, 
+    private api: ApiService,
     private cs: CartService,
     private as: AlertService) { }
 
@@ -32,22 +33,52 @@ export class SelectCartModalComponent implements OnInit {
   }
 
   select(cart: any) {
-    this.cs.setCart(cart);
-    this.currentCart = cart;
-    this.close.emit();
 
-    this.as.addAlert(new AlertMessage('success', 'Cart selected!'));
-    
-    this.selected.emit();
+    cart.isClaimed = true;
+
+    this.api.updateCart(cart)
+      .pipe(catchError(err => {
+        this.as.addAlert(new AlertMessage('error', err.error.Errors[0].Message));
+        
+        this.close.emit();
+
+        return of(null)
+      }))
+      .subscribe((data: any) => {
+        if (data == null) return;
+        this.cs.setCart(cart);
+        this.currentCart = cart;
+        this.close.emit();
+
+        this.as.addAlert(new AlertMessage('success', 'Cart selected!'));
+
+        this.selected.emit();
+      });
   }
 
   remove() {
-    this.cs.removeCart();
-    this.currentCart = null;
-    this.close.emit();
 
-    this.as.addAlert(new AlertMessage('success', 'Cart removed!'));
+    this.currentCart.isClaimed = false;
 
-    this.removed.emit();
+    this.api.updateCart(this.currentCart)
+      .pipe(catchError(err => {
+
+        this.as.addAlert(new AlertMessage('error', err.error.Errors[0].Message));
+
+        this.close.emit();
+
+        return of(null)
+      }))
+      .subscribe((data: any) => {
+        if (data == null) return;
+
+        this.cs.removeCart();
+        this.currentCart = null;
+        this.close.emit();
+
+        this.as.addAlert(new AlertMessage('success', 'Cart removed!'));
+
+        this.removed.emit();
+      });
   }
 }
