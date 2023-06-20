@@ -54,7 +54,7 @@
         </div>
         <div class="mt-auto w-full flex justify-center">
             <div class="flex flex-col justify-center items-center">
-                <p *ngIf="checkoutMethod != ''" class="text-gray-800 font-semibold text-xs mb-1 text-center">You're
+                <p *ngIf="checkoutMethod != '' && getWeightDifference() < maxWeightDifference" class="text-gray-800 font-semibold text-xs mb-1 text-center">You're
                     paying
                     with <span class="font-bold">{{checkoutMethod}}</span></p>
                 <button *ngIf="getWeightDifference() <= maxWeightDifference" (click)="checkout()"
