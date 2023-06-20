@@ -66,7 +66,7 @@ export class CheckoutComponent implements OnInit {
     }
     if (this.order) {
       this.order.orderItems.forEach((orderItem: any) => {
-        total.weight += orderItem.product.weight * orderItem.amount;
+        total.weight += (orderItem.product.weight * orderItem.amount) * 1000;
         total.price += orderItem.product.price * orderItem.amount;
         total.discount += orderItem.product.discount * orderItem.amount;
         total.discount += (orderItem.product.price * (orderItem.product.discountPercentage / 100)) * orderItem.amount;
@@ -78,6 +78,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   getWeightDifference() {
-    return Math.abs(this.getTotal().weight - this.actualWeight);
+    let diff = Math.abs(this.getTotal().weight - this.actualWeight);
+    return diff;
   }
 }
