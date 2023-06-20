@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { SharedRoutingModule } from './shared-routing.module';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { ModalComponent } from './components/modal/modal.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { ModalComponent } from './components/modal/modal.component';
   imports: [
     CommonModule,
     SharedRoutingModule,
-    NgxQRCodeModule
+    NgxQRCodeModule,
+    ReactiveFormsModule
   ],
   exports: [
     NgxQRCodeModule,

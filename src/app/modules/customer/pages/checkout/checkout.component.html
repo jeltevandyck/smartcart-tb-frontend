@@ -10,7 +10,13 @@
         <div class="mt-8">
             <h1 class="text-3xl font-bold text-fes-blue uppercase">Checkout</h1>
         </div>
-    
+
+        <div *ngIf="getWeightDifference() > maxWeightDifference"
+            class="p-4 text-sm text-red-800 rounded-lg bg-red-50  mt-8" role="alert">
+            <span class="font-bold">Warning!</span> The difference between the weight of the products and the actual
+            weight <span class="font-semibold">({{actualWeight | number: '1.2-2'}} kg)</span> is too big.
+        </div>
+
         <div class="flex flex-col items-center justify-center flex-grow">
             <div class="flex justify-center">
                 <button (click)="checkoutMethod ='card'"
@@ -29,11 +35,12 @@
                     <p class="text-lg text-fes-blue uppercase font-semibold mt-2">Cash</p>
                 </button>
             </div>
-        </div>  
+        </div>
         <div class="flex flex-col items-center justify-center mb-12 w-4/5 bg-gray-100 rounded-lg px-10 py-3">
             <div class="flex justify-items-start w-full">
                 <p class="text-sm text-fes-blue font-semibold mr-auto uppercase">Subtotal</p>
-                <p class="text-sm text-fes-blue font-semibold">{{getTotal().discount + getTotal().price | currency: 'EUR'}}</p>
+                <p class="text-sm text-fes-blue font-semibold">{{getTotal().discount + getTotal().price | currency:
+                    'EUR'}}</p>
             </div>
             <div class="flex justify-items-start w-full">
                 <p class="text-sm text-fes-blue font-semibold mr-auto uppercase">Discount</p>
@@ -45,10 +52,10 @@
                 <p class="text-fes-blue font-bold">{{getTotal().price | currency: 'EUR'}}</p>
             </div>
         </div>
-        <div class="mt-auto">
+        <div class="mt-auto w-full flex justify-center">
             <p *ngIf="checkoutMethod != ''" class="text-gray-800 font-semibold text-xs mb-1 text-center">You're paying
                 with <span class="font-bold">{{checkoutMethod}}</span></p>
-            <button (click)="checkout()"
+            <button *ngIf="getWeightDifference() <= maxWeightDifference" (click)="checkout()"
                 class="flex items-center justify-between bg-fes-blue text-white font-bold uppercase rounded-lg text-sm w-96 px-5 py-3 mb-8 shadow-xl">
                 <i *ngIf="checkoutMethod == 'card'" class="fa-regular fa-credit-card"></i>
                 <i *ngIf="checkoutMethod == 'cash'" class="fa-solid fa-sack-dollar"></i>
@@ -56,6 +63,10 @@
                         'EUR'}}</span></span>
                 <i class="fa-solid fa-arrow-right fa-shake"></i>
             </button>
+            <div *ngIf="getWeightDifference() > maxWeightDifference"
+                class="p-4 text-sm text-blue-800 rounded-lg bg-blue-50  mb-8 text-center w-4/5" role="alert">
+                <span class="font-bold">Info!</span> Call a supervisor to proceed!
+            </div>
         </div>
     </div>
 </div>

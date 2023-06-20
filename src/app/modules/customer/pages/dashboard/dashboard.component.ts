@@ -18,6 +18,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   editProduct: any;
   order: any;
 
+  actualWeight: number = 0.0;
+
   scannedProductObserver: any;
   confirmEveryItemScanned: boolean = false;
 
@@ -40,7 +42,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.ws.getMessage().subscribe((msg) => {
       const data = JSON.parse(msg.data);
 
-      if (data.cartId !== this.cs.getCart().id) return; 
+      if (data.cartId !== this.cs.getCart().id) return;
 
       if (data.type === 'scan') {
         const cart = this.cs.getCart();
@@ -58,6 +60,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
               this.as.addAlert(new AlertMessage('success', `Product ${product.name} added to cart!`));
             }
           })
+      } else if (data.type === 'weight') {
+        this.actualWeight = data.data.weight;
       }
     });
 
@@ -107,6 +111,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         return;
       }
 
+      this.cs.setWeight(this.actualWeight);
       this.rt.navigate(['/c/checkout']);
     } else {
       this.as.addAlert(new AlertMessage('error', 'You didn\'t add any products to cart.'))

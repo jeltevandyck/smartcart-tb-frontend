@@ -102,4 +102,38 @@ export class CartService {
     this.updateOrderItem.emit();
   }
   //#endregion
+
+  //#region Weight
+  setWeight(weight: any) {
+    this.storage.setItem('weight', weight);
+  }
+
+  getWeight() {
+    return this.storage.getItem('weight');
+  }
+
+  removeWeight() {
+    this.storage.removeItem('weight');
+  }
+
+  isWeight() {
+    return this.storage.getItem('weight') ? true : false;
+  }
+
+  setMaxWeight(weight: any) {
+    this.storage.setItem('maxWeight', weight);
+  }
+
+  getMaxWeight() {
+    return this.storage.getItem('maxWeight');
+  }
+
+  removeMaxWeight() {
+    this.storage.removeItem('maxWeight');
+  }
+
+  isMaxWeight() {
+    return this.storage.getItem('maxWeight') ? true : false;
+  }
+  //#endregion
 }

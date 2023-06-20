@@ -41,6 +41,7 @@ export class HelpModalComponent implements OnInit {
     this.api.unregisterCart(cart).subscribe((data) => {
       this.cs.removeUser();
       this.cs.removeGroceryList();
+      this.cs.removeWeight();
       this.rt.navigate(['/c/start']);
     })
     this.cs.removeOrder();

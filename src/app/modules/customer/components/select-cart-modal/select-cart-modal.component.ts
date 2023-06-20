@@ -16,6 +16,7 @@ export class SelectCartModalComponent implements OnInit {
   @Output() selected = new EventEmitter();
   @Output() removed = new EventEmitter();
 
+  maxWeightDifference: number = 0;
   carts: any[] = []
   currentCart: any;
 
@@ -28,6 +29,8 @@ export class SelectCartModalComponent implements OnInit {
     this.api.getAllCarts().subscribe((data: any) => {
       this.carts = data;
     })
+
+    this.maxWeightDifference = this.cs.getMaxWeight();
 
     this.currentCart = this.cs.getCart();
   }
@@ -80,5 +83,11 @@ export class SelectCartModalComponent implements OnInit {
 
         this.removed.emit();
       });
+  }
+
+  updateDifference() {
+    this.cs.setMaxWeight(this.maxWeightDifference);
+
+    this.close.emit();
   }
 }

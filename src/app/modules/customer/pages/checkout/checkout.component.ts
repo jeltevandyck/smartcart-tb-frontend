@@ -13,6 +13,8 @@ import { CartService } from 'src/app/modules/shared/services/cart.service';
 export class CheckoutComponent implements OnInit {
 
   order: any;
+  actualWeight: number = 0.0;
+  maxWeightDifference: number = 0.0;
 
   checkoutMethod = '';
 
@@ -25,6 +27,8 @@ export class CheckoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.order = this.cs.getOrder();
+    this.actualWeight =this.cs.getWeight();
+    this.maxWeightDifference = this.cs.getMaxWeight();
 
     if (!this.order) {
       this.rt.navigate(['/c/start']);
@@ -40,6 +44,7 @@ export class CheckoutComponent implements OnInit {
     this.cs.removeGroceryList();
     this.cs.removeOrder();
     this.cs.removeUser();
+    this.cs.removeWeight();
 
     const cart = this.cs.getCart();
 
@@ -70,5 +75,9 @@ export class CheckoutComponent implements OnInit {
       total.price -= total.discount;
     }
     return total;
+  }
+
+  getWeightDifference() {
+    return Math.abs(this.getTotal().weight - this.actualWeight);
   }
 }
